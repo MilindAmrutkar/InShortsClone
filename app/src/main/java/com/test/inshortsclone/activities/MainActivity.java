@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import com.test.inshortsclone.utils.NetworkUtils;
 import com.test.inshortsclone.R;
 import com.test.inshortsclone.adapters.VerticalPagerAdapter;
 import com.test.inshortsclone.models.News;
+import com.test.inshortsclone.utils.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,10 +39,17 @@ public class MainActivity extends AppCompatActivity {
     //For horizontal scrolling
     ViewPager viewPager;
 
+    //Shared preferences for login check
+    public static final String emailSharedPrefKey = "emailKey";
+    String userEmail = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        userEmail = Utility.getDefaults(emailSharedPrefKey, MainActivity.this);
+        Log.i(TAG, "onCreate: userEmail: " + userEmail);
 
         //Internet connectivity check
         if(NetworkUtils.isOnline(MainActivity.this)) {
@@ -60,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_signUp);
+        if(userEmail!=null && !userEmail.isEmpty()) {
+            menuItem.setVisible(false);
+            return true;
+        }
         return true;
     }
 

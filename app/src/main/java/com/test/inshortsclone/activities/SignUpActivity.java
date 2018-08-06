@@ -14,14 +14,19 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.test.inshortsclone.utils.NetworkUtils;
 import com.test.inshortsclone.R;
+import com.test.inshortsclone.utils.NetworkUtils;
+import com.test.inshortsclone.utils.Utility;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    public static final String emailSharedPrefKey = "emailKey";
     private static final String TAG = SignUpActivity.class.getSimpleName();
+    String email = "";
     private EditText etEmail, etPassword;
     private Button btnSignUp;
+
+    //SharedPreferences to store user session
     private ProgressBar progressBar;
     private FirebaseAuth auth;
 
@@ -44,7 +49,8 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                final String email = etEmail.getText().toString().trim();
+
+                email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
 
                 //Email address validation
@@ -84,24 +90,24 @@ public class SignUpActivity extends AppCompatActivity {
                                /* Toast.makeText(SignUpActivity.this,
                                         "Registration status: " + task.isSuccessful(),
                                         Toast.LENGTH_SHORT).show();*/
-
-                                    Toast.makeText(SignUpActivity.this,
-                                            "Registration successful.",
-                                            Toast.LENGTH_SHORT).show();
-                                    progressBar.setVisibility(View.GONE);
-
-                                    if (!task.isSuccessful()) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(SignUpActivity.this,
+                                                "Registration successful.",
+                                                Toast.LENGTH_SHORT).show();
+                                        progressBar.setVisibility(View.GONE);
+                                        Utility.setDefaults(emailSharedPrefKey, email, SignUpActivity.this);
+                                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                        finish();
+                                    } else if (!task.isSuccessful()) {
                                     /*Toast.makeText(SignUpActivity.this,
                                             "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();*/
                                         Toast.makeText(SignUpActivity.this,
                                                 "Authentication failed. Please try again. ",
                                                 Toast.LENGTH_SHORT).show();
+                                        progressBar.setVisibility(View.GONE);
 
 
-                                    } else {
-                                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                                        finish();
                                     }
                                 }
                             });
