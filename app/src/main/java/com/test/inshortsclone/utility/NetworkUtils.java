@@ -1,4 +1,4 @@
-package com.test.inshortsclone;
+package com.test.inshortsclone.utility;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -80,7 +80,7 @@ public class NetworkUtils {
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+        return netInfo != null;
     }
 
 }

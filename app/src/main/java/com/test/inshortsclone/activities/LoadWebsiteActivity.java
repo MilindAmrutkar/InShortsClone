@@ -24,18 +24,19 @@ public class LoadWebsiteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load_website);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        WebView webView = findViewById(R.id.webview);
-        Bundle bundle = getIntent().getExtras();
-
         final ProgressDialog progressDialog = new ProgressDialog(this);
 
+        //To display the up navigation arrow in Action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //For getting Article URL from VerticalPagerAdapter
+        Bundle bundle = getIntent().getExtras();
         String articleUrl = bundle.getString("newsArticleUrl");
-        Log.i(TAG, "onCreate: newsArticleUrl: " + articleUrl);
+        //Log.i(TAG, "onCreate: newsArticleUrl: " + articleUrl);
 
+        //For loading website
+        WebView webView = findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
-
         webView.setWebViewClient(new WebViewClient() {
 
             @Override

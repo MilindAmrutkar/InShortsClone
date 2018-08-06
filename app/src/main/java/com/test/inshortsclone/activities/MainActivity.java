@@ -12,7 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.test.inshortsclone.NetworkUtils;
+import com.test.inshortsclone.utility.NetworkUtils;
 import com.test.inshortsclone.R;
 import com.test.inshortsclone.VerticalViewPager;
 import com.test.inshortsclone.adapters.VerticalPagerAdapter;
@@ -37,14 +37,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Internet connectivity check
         if(NetworkUtils.isOnline(MainActivity.this)) {
             URL newsUrl = NetworkUtils.buildUrlForNews();
+
+            //Calling asynctask to fetch data from newsapi
             new FetchNewsDetails(this).execute(newsUrl);
+
         } else {
             Toast.makeText(this, "Internet connectivity issue. Switch on the internet", Toast.LENGTH_SHORT).show();
         }
     }
 
+
+    //For showing menu item in action bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -52,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Method for performing some action on click of an action bar button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -67,11 +74,13 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Setting the values to the adapter
     private void initSwipePager() {
         mVerticalViewPager = findViewById(R.id.viewPager);
         mVerticalViewPager.setAdapter(new VerticalPagerAdapter(this, newsArrayList));
     }
 
+    //Method to perform some action on back button pressed
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -93,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    //Method for parsing JSON which we receive from newsapi
     private ArrayList<News> parseJSON(String newsSearchResults) {
         if (newsArrayList != null) {
             newsArrayList.clear();
@@ -132,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
+    //Asynctask for fetching data from newsapi
     private class FetchNewsDetails extends AsyncTask<URL, Void, String> {
         private ProgressDialog mProgressDialog;
 
@@ -171,8 +182,6 @@ public class MainActivity extends AppCompatActivity {
             }
             super.onPostExecute(newsSearchResults);
         }
-
-
     }
 
 
