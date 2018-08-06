@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.test.inshortsclone.NetworkUtils;
 import com.test.inshortsclone.R;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -76,33 +77,38 @@ public class SignUpActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<com.google.firebase.auth.AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
+                if(NetworkUtils.isOnline(SignUpActivity.this)) {
+
+                    auth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<com.google.firebase.auth.AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
                                /* Toast.makeText(SignUpActivity.this,
                                         "Registration status: " + task.isSuccessful(),
                                         Toast.LENGTH_SHORT).show();*/
 
-                                Toast.makeText(SignUpActivity.this,
-                                        "Registration successful.",
-                                        Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
+                                    Toast.makeText(SignUpActivity.this,
+                                            "Registration successful.",
+                                            Toast.LENGTH_SHORT).show();
+                                    progressBar.setVisibility(View.GONE);
 
-                                if (!task.isSuccessful()) {
+                                    if (!task.isSuccessful()) {
                                     /*Toast.makeText(SignUpActivity.this,
                                             "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();*/
-                                    Toast.makeText(SignUpActivity.this,
-                                            "Authentication failed. Please try again. ",
-                                            Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignUpActivity.this,
+                                                "Authentication failed. Please try again. ",
+                                                Toast.LENGTH_SHORT).show();
 
-                                } else {
-                                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                                    finish();
+                                    } else {
+                                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                        finish();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Network issue. Switch on the internet", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

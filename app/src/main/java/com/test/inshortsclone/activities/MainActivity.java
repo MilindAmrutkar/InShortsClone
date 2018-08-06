@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.test.inshortsclone.NetworkUtils;
 import com.test.inshortsclone.R;
@@ -36,8 +37,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        URL newsUrl = NetworkUtils.buildUrlForNews();
-        new FetchNewsDetails(this).execute(newsUrl);
+        if(NetworkUtils.isOnline(MainActivity.this)) {
+            URL newsUrl = NetworkUtils.buildUrlForNews();
+            new FetchNewsDetails(this).execute(newsUrl);
+        } else {
+            Toast.makeText(this, "Internet connectivity issue. Switch on the internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
