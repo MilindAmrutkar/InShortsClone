@@ -24,34 +24,14 @@ public class VerticalViewPager extends ViewPager {
     }
 
     private void init() {
-        setPageTransformer(true, new VerticalPageTransformer());
+
+        //To enable vertical scrolling
+        //setPageTransformer(true, new VerticalPageTransformer());
+
         setOverScrollMode(OVER_SCROLL_NEVER);
     }
 
-    private MotionEvent swapXY(MotionEvent ev) {
-        float width = getWidth();
-        float height = getHeight();
-
-        float newX = (ev.getY() / height) * width;
-        float newY = (ev.getX() / width) * height;
-
-        ev.setLocation(newX, newY);
-
-        return ev;
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        boolean intercepted = super.onInterceptTouchEvent(swapXY(ev));
-        swapXY(ev);
-        return intercepted;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        return super.onTouchEvent(swapXY(ev));
-    }
-
+    //Class for vertical scrolling animation effect
     private class VerticalPageTransformer implements ViewPager.PageTransformer {
 
         private static final float MIN_SCALE = 0.75f;
@@ -83,4 +63,30 @@ public class VerticalViewPager extends ViewPager {
             }
         }
     }
+
+    private MotionEvent swapXY(MotionEvent ev) {
+        float width = getWidth();
+        float height = getHeight();
+
+        float newX = (ev.getY() / height) * width;
+        float newY = (ev.getX() / width) * height;
+
+        ev.setLocation(newX, newY);
+
+        return ev;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        boolean intercepted = super.onInterceptTouchEvent(swapXY(ev));
+        swapXY(ev);
+        return intercepted;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        return super.onTouchEvent(swapXY(ev));
+    }
+
+
 }

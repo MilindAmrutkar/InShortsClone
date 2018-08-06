@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.test.inshortsclone.utility.NetworkUtils;
+import com.test.inshortsclone.utils.NetworkUtils;
 import com.test.inshortsclone.R;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -76,6 +76,7 @@ public class SignUpActivity extends AppCompatActivity {
                 if (NetworkUtils.isOnline(SignUpActivity.this)) {
 
                     progressBar.setVisibility(View.VISIBLE);
+
                     auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<com.google.firebase.auth.AuthResult>() {
                                 @Override

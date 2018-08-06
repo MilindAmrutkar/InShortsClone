@@ -6,15 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.test.inshortsclone.utility.NetworkUtils;
+import com.test.inshortsclone.utils.NetworkUtils;
 import com.test.inshortsclone.R;
-import com.test.inshortsclone.VerticalViewPager;
 import com.test.inshortsclone.adapters.VerticalPagerAdapter;
 import com.test.inshortsclone.models.News;
 
@@ -30,7 +30,12 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private ArrayList<News> newsArrayList = new ArrayList<>();
-    private VerticalViewPager mVerticalViewPager;
+
+    //For vertical scrolling
+    //private VerticalViewPager mVerticalViewPager;
+
+    //For horizontal scrolling
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +81,13 @@ public class MainActivity extends AppCompatActivity {
 
     //Setting the values to the adapter
     private void initSwipePager() {
-        mVerticalViewPager = findViewById(R.id.viewPager);
-        mVerticalViewPager.setAdapter(new VerticalPagerAdapter(this, newsArrayList));
+        // For horizontal scrolling effect
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(new VerticalPagerAdapter(this, newsArrayList));
+
+        //For vertical swiping effect
+        //mVerticalViewPager = findViewById(R.id.viewPager);
+        //mVerticalViewPager.setAdapter(new VerticalPagerAdapter(this, newsArrayList));
     }
 
     //Method to perform some action on back button pressed

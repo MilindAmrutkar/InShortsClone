@@ -60,7 +60,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
-        return view == ((LinearLayout) o);
+        return view ==  o;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

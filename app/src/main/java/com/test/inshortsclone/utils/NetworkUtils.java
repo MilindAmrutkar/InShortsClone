@@ -1,4 +1,4 @@
-package com.test.inshortsclone.utility;
+package com.test.inshortsclone.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
