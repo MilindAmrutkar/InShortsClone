@@ -77,15 +77,6 @@ public class VerticalPagerAdapter extends PagerAdapter {
         ImageView newsImageView = itemView.findViewById(R.id.imageView);
         TextView newsTitleTV = itemView.findViewById(R.id.newsTitle);
         Button newsUrlBtn = itemView.findViewById(R.id.newsUrl);
-        FloatingActionButton signUpButton = itemView.findViewById(R.id.fab);
-
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, SignUpActivity.class);
-                mContext.startActivity(intent);
-            }
-        });
 
         newsUrlBtn.setStateListAnimator(null);
 
@@ -102,7 +93,8 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
         //Checking if the description is null
 
-        if(!news.getDescription().equals("null")) {
+        if(!news.getDescription().equals("null") || news.getDescription().isEmpty()) {
+            Log.i(TAG, "instantiateItem: Description: " + news.getDescription() + "\n");
             newsDescriptionTV.setText(news.getDescription());
         } else {
             newsDescriptionTV.setText("For more info click on the link mentioned below");

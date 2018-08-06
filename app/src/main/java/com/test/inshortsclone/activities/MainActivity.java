@@ -3,15 +3,19 @@ package com.test.inshortsclone.activities;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.test.inshortsclone.NetworkUtils;
-import com.test.inshortsclone.models.News;
 import com.test.inshortsclone.R;
-import com.test.inshortsclone.adapters.VerticalPagerAdapter;
 import com.test.inshortsclone.VerticalViewPager;
+import com.test.inshortsclone.adapters.VerticalPagerAdapter;
+import com.test.inshortsclone.models.News;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,9 +40,30 @@ public class MainActivity extends AppCompatActivity {
         new FetchNewsDetails(this).execute(newsUrl);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_signUp:
+                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                startActivity(intent);
+                break;
+
+            default:
+                break;
+
+        }
+        return true;
+    }
+
     private void initSwipePager() {
         mVerticalViewPager = findViewById(R.id.viewPager);
-
         mVerticalViewPager.setAdapter(new VerticalPagerAdapter(this, newsArrayList));
     }
 
@@ -61,6 +86,45 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .create()
                 .show();
+    }
+
+    private ArrayList<News> parseJSON(String newsSearchResults) {
+        if (newsArrayList != null) {
+            newsArrayList.clear();
+        }
+
+        if (newsSearchResults != null) {
+            try {
+                JSONObject rootObject = new JSONObject(newsSearchResults);
+                JSONArray results = rootObject.getJSONArray("articles");
+
+                for (int i = 0; i < results.length(); i++) {
+                    News news = new News();
+
+                    JSONObject resultsObj = results.getJSONObject(i);
+
+                    String newsTitle = resultsObj.getString("title");
+                    news.setTitle(newsTitle);
+
+                    String newsDescription = resultsObj.getString("description");
+                    news.setDescription(newsDescription);
+
+                    String newsArticleUrl = resultsObj.getString("url");
+                    news.setArticleUrl(newsArticleUrl);
+
+                    String newsImageUrl = resultsObj.getString("urlToImage");
+                    news.setImageUrl(newsImageUrl);
+
+                    newsArrayList.add(news);
+                }
+
+                return newsArrayList;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     private class FetchNewsDetails extends AsyncTask<URL, Void, String> {
@@ -88,69 +152,22 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            //Log.i(TAG, "doInBackground: newsSearchResults: " + newsSearchResults);
-
             return newsSearchResults;
         }
 
         @Override
         protected void onPostExecute(String newsSearchResults) {
-            if(mProgressDialog.isShowing()) {
+            if (mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
-            if(newsSearchResults != null && !newsSearchResults.equals("")) {
-                newsArrayList.addAll( parseJSON(newsSearchResults));
+            if (newsSearchResults != null && !newsSearchResults.equals("")) {
+                newsArrayList = parseJSON(newsSearchResults);
                 initSwipePager();
             }
             super.onPostExecute(newsSearchResults);
         }
 
 
-    }
-
-    private ArrayList<News> parseJSON(String newsSearchResults) {
-        if(newsArrayList != null) {
-            newsArrayList.clear();
-        }
-
-        if(newsSearchResults != null) {
-            try {
-                JSONObject rootObject = new JSONObject(newsSearchResults);
-                JSONArray results = rootObject.getJSONArray("articles");
-
-                for (int i = 0; i < results.length(); i++) {
-                    News news = new News();
-
-                    JSONObject resultsObj = results.getJSONObject(i);
-
-                    String newsTitle = resultsObj.getString("title");
-                    news.setTitle(newsTitle);
-
-                    String newsDescription = resultsObj.getString("description");
-                    news.setDescription(newsDescription);
-
-                    String newsArticleUrl = resultsObj.getString("url");
-                    news.setArticleUrl(newsArticleUrl);
-
-                    String newsImageUrl = resultsObj.getString("urlToImage");
-                    news.setImageUrl(newsImageUrl);
-
-                    /*Log.i(TAG, "parseJSON: News Title: " + newsTitle + " " +
-                    " News Description: " + newsDescription + " " +
-                    " News Article URL : " + newsArticleUrl + " " +
-                    " News Image URL : " + newsImageUrl +
-                    " \n");*/
-
-                    newsArrayList.add(news);
-                }
-
-                return newsArrayList;
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 
 

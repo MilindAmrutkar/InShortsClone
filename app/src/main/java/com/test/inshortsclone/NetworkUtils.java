@@ -1,7 +1,6 @@
 package com.test.inshortsclone;
 
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +49,7 @@ public class NetworkUtils {
             e.printStackTrace();
         }
 
-        Log.i(TAG, "buildUrlForNews: url: "+url);
+        //Log.i(TAG, "buildUrlForNews: url: "+url);
         return url;
     }
 
@@ -64,8 +63,8 @@ public class NetworkUtils {
             scanner.useDelimiter("\\A");
 
             boolean hasInput = scanner.hasNext();
-            if(hasInput) {
-                return  scanner.next();
+            if (hasInput) {
+                return scanner.next();
             } else {
                 return null;
             }
