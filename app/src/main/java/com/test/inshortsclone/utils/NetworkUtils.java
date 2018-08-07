@@ -18,7 +18,7 @@ import java.util.Scanner;
  */
 public class NetworkUtils {
 
-    //https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=e64a67e06a3f403491d3d2975bef5bb8
+    //https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=YOUR_API_KEY
 
     private static final String TAG = "NetworkUtils";
 
