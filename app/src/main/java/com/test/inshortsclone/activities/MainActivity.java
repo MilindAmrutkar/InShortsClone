@@ -14,10 +14,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.test.inshortsclone.utils.NetworkUtils;
 import com.test.inshortsclone.R;
-import com.test.inshortsclone.adapters.VerticalPagerAdapter;
+import com.test.inshortsclone.adapters.CustomPagerAdapter;
 import com.test.inshortsclone.models.News;
+import com.test.inshortsclone.utils.NetworkUtils;
 import com.test.inshortsclone.utils.Utility;
 
 import org.json.JSONArray;
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     private void initSwipePager() {
         // For horizontal scrolling effect
         viewPager = findViewById(R.id.viewPager);
-        viewPager.setAdapter(new VerticalPagerAdapter(this, newsArrayList));
+        viewPager.setAdapter(new CustomPagerAdapter(this, newsArrayList));
 
         //For vertical swiping effect
         //mVerticalViewPager = findViewById(R.id.viewPager);
