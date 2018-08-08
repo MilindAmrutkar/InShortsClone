@@ -27,7 +27,7 @@ public class NetworkUtils {
 
     private final static String PARAM_API_KEY = "apiKey";
 
-    private final static String API_KEY = "YOUR_API_KEY";
+    private final static String API_KEY = "e64a67e06a3f403491d3d2975bef5bb8";
 
     private final static String PARAM_COUNTRY = "country";
 
