@@ -1,10 +1,8 @@
 package com.test.inshortsclone.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,22 +14,23 @@ import android.widget.Toast;
 
 import com.test.inshortsclone.R;
 import com.test.inshortsclone.adapters.CustomPagerAdapter;
-import com.test.inshortsclone.models.News;
+import com.test.inshortsclone.models.Article;
+import com.test.inshortsclone.models.NewsResult;
+import com.test.inshortsclone.rest.ApiClient;
+import com.test.inshortsclone.rest.ApiInterface;
 import com.test.inshortsclone.utils.NetworkUtils;
 import com.test.inshortsclone.utils.Utility;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.List;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private ArrayList<News> newsArrayList = new ArrayList<>();
+    //private ArrayList<Article> newsArrayList = new ArrayList<>();
 
     //For vertical scrolling
     //private VerticalViewPager mVerticalViewPager;
@@ -53,10 +52,46 @@ public class MainActivity extends AppCompatActivity {
 
         //Internet connectivity check
         if(NetworkUtils.isOnline(MainActivity.this)) {
-            URL newsUrl = NetworkUtils.buildUrlForNews();
+
+            // =================== Network call using AsyncTask ===============================
+
+           /* URL newsUrl = NetworkUtils.buildUrlForNews();
 
             //Calling asynctask to fetch data from newsapi
-            new FetchNewsDetails(this).execute(newsUrl);
+            new FetchNewsDetails(this).execute(newsUrl);*/
+
+            //==============================AsyncTask==========================================
+
+            //=========================For Retrofit ====================================//
+
+            ApiInterface apiService =
+                    ApiClient.getClient().create(ApiInterface.class);
+
+            Call<NewsResult> call = apiService.getTopNewsHeadlines("us", "business", NetworkUtils.getApiKey());
+            call.enqueue(new Callback<NewsResult>() {
+                @Override
+                public void onResponse(Call<NewsResult> call, Response<NewsResult> response) {
+                    int statusCode = response.code();
+                    Log.d(TAG, "onResponse: statusCode: " + statusCode);
+
+                    List<Article> articles = response.body().getArticles();
+                    Log.d(TAG, "Number of news received: " + articles.size());
+
+                    //initSwipePager();
+
+                    viewPager = findViewById(R.id.viewPager);
+                    viewPager.setAdapter(new CustomPagerAdapter(getApplicationContext(), articles));
+
+                }
+
+                @Override
+                public void onFailure(Call<NewsResult> call, Throwable t) {
+                    Log.e(TAG, "onFailure: " + t.toString());
+                }
+            });
+
+
+            //==============================Retrofit Part ===================================//
 
         } else {
             Toast.makeText(this, "Internet connectivity issue. Switch on the internet", Toast.LENGTH_SHORT).show();
@@ -94,15 +129,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Setting the values to the adapter
+
+    /*
     private void initSwipePager() {
         // For horizontal scrolling effect
         viewPager = findViewById(R.id.viewPager);
-        viewPager.setAdapter(new CustomPagerAdapter(this, newsArrayList));
+        viewPager.setAdapter(new CustomPagerAdapter(this, news));
 
         //For vertical swiping effect
         //mVerticalViewPager = findViewById(R.id.viewPager);
         //mVerticalViewPager.setAdapter(new VerticalPagerAdapter(this, newsArrayList));
-    }
+    }*/
 
     //Method to perform some action on back button pressed
     @Override
@@ -127,7 +164,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Method for parsing JSON which we receive from newsapi
-    private ArrayList<News> parseJSON(String newsSearchResults) {
+
+    /*
+    private ArrayList<Article> parseJSON(String newsSearchResults) {
         if (newsArrayList != null) {
             newsArrayList.clear();
         }
@@ -138,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray results = rootObject.getJSONArray("articles");
 
                 for (int i = 0; i < results.length(); i++) {
-                    News news = new News();
+                    Article news = new Article();
 
                     JSONObject resultsObj = results.getJSONObject(i);
 
@@ -208,5 +247,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    */
 
 }

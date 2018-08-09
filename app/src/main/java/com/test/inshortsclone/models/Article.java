@@ -1,15 +1,24 @@
 package com.test.inshortsclone.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Copyright 2018 Isequalto Learning Systems Private Limited
  * Created on 8/3/2018.
  */
-public class News {
+public class Article {
 
-    String title;
-    String description;
-    String articleUrl;
-    String imageUrl;
+    @SerializedName("title")
+    private String title;
+
+    @SerializedName("description")
+    private String description;
+
+    @SerializedName("url")
+    private String articleUrl;
+
+    @SerializedName("urlToImage")
+    private String imageUrl;
 
     public String getTitle() {
         return title;
@@ -42,4 +51,5 @@ public class News {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
 }

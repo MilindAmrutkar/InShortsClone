@@ -28,9 +28,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.test.inshortsclone.R;
 import com.test.inshortsclone.activities.LoadWebsiteActivity;
-import com.test.inshortsclone.models.News;
+import com.test.inshortsclone.models.Article;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyright 2018 Isequalto Learning Systems Private Limited
@@ -42,14 +42,14 @@ public class CustomPagerAdapter extends PagerAdapter {
             CustomPagerAdapter.class.getSimpleName();
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    private ArrayList<News> mNewsArrayList;
+    private List<Article> mArticlesList;
 
     //For gifs
     private RequestManager requestManager = null;
 
-    public CustomPagerAdapter(Context context, ArrayList<News> newsArrayList) {
+    public CustomPagerAdapter(Context context, List<Article> articleList) {
         mContext = context;
-        mNewsArrayList = newsArrayList;
+        mArticlesList = articleList;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE
         );
@@ -57,7 +57,7 @@ public class CustomPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return mNewsArrayList.size();
+        return mArticlesList.size();
     }
 
     @Override
@@ -70,9 +70,9 @@ public class CustomPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.content_main, container, false);
-        News news = mNewsArrayList.get(position);
+        Article article = mArticlesList.get(position);
 
-        Log.i(TAG, "instantiateItem: NewsTitle: " + news.getTitle());
+        Log.i(TAG, "instantiateItem: NewsTitle: " + article.getTitle());
 
         TextView newsDescriptionTV = itemView.findViewById(R.id.newsDescription);
         ImageView newsImageView = itemView.findViewById(R.id.imageView);
@@ -88,30 +88,30 @@ public class CustomPagerAdapter extends PagerAdapter {
 
         //Checking if the title is null
 
-        if (!news.getTitle().equals("null")) {
-            newsTitleTV.setText(news.getTitle());
+        if (!article.getTitle().equals("null")) {
+            newsTitleTV.setText(article.getTitle());
         } else {
             newsTitleTV.setText("No Title");
         }
 
         //Checking if the description is null
 
-        if (!news.getDescription().equals("null") || news.getDescription().isEmpty()) {
-            Log.i(TAG, "instantiateItem: Description: " + news.getDescription() + "\n");
-            newsDescriptionTV.setText(news.getDescription());
+        if (!article.getDescription().equals("null") || article.getDescription().isEmpty()) {
+            Log.i(TAG, "instantiateItem: Description: " + article.getDescription() + "\n");
+            newsDescriptionTV.setText(article.getDescription());
         } else {
             newsDescriptionTV.setText("For more info click on the link mentioned below");
         }
 
-        //Checking if the news url is null
+        //Checking if the article url is null
 
-        if (!news.getArticleUrl().equals("null")) {
-            newsUrlBtn.setText(news.getArticleUrl());
+        if (!article.getArticleUrl().equals("null")) {
+            newsUrlBtn.setText(article.getArticleUrl());
         } else {
             newsUrlBtn.setVisibility(View.GONE);
         }
 
-        final String articleUrl = news.getArticleUrl();
+        final String articleUrl = article.getArticleUrl();
 
         newsUrlBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +125,7 @@ public class CustomPagerAdapter extends PagerAdapter {
         });
 
         Glide.with(mContext)
-                .load(news.getImageUrl())
+                .load(article.getImageUrl())
                 .apply(new RequestOptions().placeholder(R.drawable.image_missing).error(R.drawable.image_missing))
 
                 .listener(new RequestListener<Drawable>() {

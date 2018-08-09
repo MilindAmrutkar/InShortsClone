@@ -27,7 +27,7 @@ public class NetworkUtils {
 
     private final static String PARAM_API_KEY = "apiKey";
 
-    private final static String API_KEY = "e64a67e06a3f403491d3d2975bef5bb8";
+    private final static String API_KEY = "YOUR API KEY";
 
     private final static String PARAM_COUNTRY = "country";
 
@@ -36,6 +36,10 @@ public class NetworkUtils {
     private final static String PARAM_CATEGORY = "category";
 
     private final static String CATEGORY_VALUE = "business";
+
+    public static String getApiKey() {
+        return API_KEY;
+    }
 
     public static URL buildUrlForNews() {
         Uri builtUri = Uri.parse(NEWSDB_BASE_URL).buildUpon()

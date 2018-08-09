@@ -65,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/newsDescription"
                 android:layout_marginTop="10dp"
+                android:scaleType="fitCenter"
                 android:padding="2dp"
                 android:src="@drawable/news_gif"/>
 
